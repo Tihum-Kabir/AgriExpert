@@ -66,7 +66,7 @@
         .then((res) => res.json())
         .then((data) => {
           if (data.status === "success") {
-            const records = data.records.reverse(); // show oldest to newest
+            const records = data.records; // show oldest to newest
             const labels = records.map((r) =>
               new Date(r.created_at).toLocaleDateString()
             );
