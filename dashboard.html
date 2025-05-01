@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard - Agricultural Expert System</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: "Poppins", sans-serif;
+      }
+
+      body {
+        background-color: #f5fdf8;
+        padding: 20px;
+      }
+
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 50px;
+        background: linear-gradient(to right, #6cc85c, #30cfd0);
+        color: white;
+      }
+
+      header .nav {
+        display: flex;
+        gap: 30px;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .logo img {
+        height: 45px;
+        width: 45px;
+      }
+
+      .logo h3 {
+        padding-left: 20px;
+        font-size: 1.7rem;
+      }
+
+      header .nav a {
+        color: white;
+        font-weight: bold;
+        text-decoration: none;
+      }
+
+      .dashboard {
+        display: grid;
+        grid-template-columns: 1fr 1.5fr 1fr;
+        grid-gap: 20px;
+        margin-top: 20px;
+      }
+
+      .card {
+        background: #c6ecd7;
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .card h2 {
+        font-size: 2rem;
+        margin-bottom: 15px;
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 600;
+      }
+
+      .form-group select {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+
+      .buttons {
+        display: flex;
+        gap: 15px;
+        margin-top: 20px;
+      }
+
+      .buttons a,
+      .buttons button {
+        flex: 1;
+        padding: 10px;
+        border: none;
+        border-radius: 10px;
+        background-color: #5ac97d;
+        color: white;
+        font-weight: bold;
+        text-align: center;
+        cursor: pointer;
+        text-decoration: none;
+        transition: background 0.3s;
+      }
+
+      .buttons a:hover,
+      .buttons button:hover {
+        background-color: #45b369;
+      }
+
+      #recommendationBox,
+      #productBox,
+      #cropBox {
+        margin-top: 15px;
+        padding: 10px;
+        background-color: #e2f5e9;
+        border-radius: 8px;
+        min-height: 60px;
+      }
+
+      #weatherCard {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      #weatherCard .form-group {
+        display: flex;
+        flex-direction: column;
+        align-content: center;
+      }
+
+      #weatherCard .form-group label {
+        text-align: center;
+      }
+
+      #weatherCard .form-group button {
+        margin: 10px;
+        padding: 5px 5px 5px 5px;
+        border: none;
+        border-radius: 8px;
+        color: #fff;
+        background-color: #5ac97d;
+      }
+
+      #weatherCityInput {
+        border-radius: 8px;
+      }
+
+      #weatherCard .form-group button:hover {
+        background-color: #45b369;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="logo">
+        <img src="farmer.png" />
+        <h3>AgriExpert</h3>
+      </div>
+      <div class="nav">
+        <a href="profile-view.html">View Profile</a>
+        <a href="index.html">Logout</a>
+      </div>
+    </header>
+
+    <main class="dashboard">
+      <!-- Welcome and Results -->
+      <div>
+        <div class="card">
+          <h2>My Farm<br />Welcome Back!</h2>
+          <p><strong>Soil Analysis Result</strong></p>
+          <div id="recommendationBox">
+            Fertilizer recommendation will appear here.
+          </div>
+          <br />
+          <p><strong>Best Fertilizer Products (with Price)</strong></p>
+          <div id="productBox">
+            Product list will appear here based on recommendation.
+          </div>
+          <br />
+          <p><strong>Crop Recommendations</strong></p>
+          <div id="cropBox">Crop suggestions will appear here.</div>
+        </div>
+      </div>
+
+      <!-- Weather Info -->
+      <div>
+        <div class="card" id="weatherCard">
+          <h2>Weather for <span id="weatherCityName">Dhaka</span></h2>
+          <p id="weatherTemp" style="font-size: 2rem; font-weight: bold">
+            --°C
+          </p>
+          <p id="weatherCondition">Loading...</p>
+          <div class="form-group" style="margin-top: 15px">
+            <label for="weatherCityInput">Select City</label>
+            <select id="weatherCityInput">
+              <option value="Dhaka">Dhaka</option>
+              <option value="Rajshahi">Rajshahi</option>
+              <option value="Rangpur">Rangpur</option>
+              <option value="Mymensingh">Mymensingh</option>
+              <option value="Khulna">Khulna</option>
+              <option value="Barisal">Barisal</option>
+              <option value="Sylhet">Sylhet</option>
+            </select>
+            <button onclick="updateWeather()">Update</button>
+          </div>
+        </div>
+        <div class="buttons">
+          <a href="trends.html">Trends</a>
+          <a href="past-reports.html">Past Reports</a>
+        </div>
+      </div>
+
+      <!-- Soil Analysis Form -->
+      <div>
+        <div class="card">
+          <h2>Soil Analysis</h2>
+          <div class="form-group">
+            <label for="soilPh">Soil pH (0 - 14)</label>
+            <select id="soilPh">
+              <option value="">--Select pH--</option>
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+              <option value="11">11</option>
+              <option value="12">12</option>
+              <option value="13">13</option>
+              <option value="14">14</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="moisture">Moisture (%)</label>
+            <select id="moisture">
+              <option value="">--Select--</option>
+              <option value="Low">Low (&lt;20%)</option>
+              <option value="Medium">Medium (20–50%)</option>
+              <option value="High">High (&gt;50%)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="nitrogen">Nitrogen (ppm)</label>
+            <select id="nitrogen">
+              <option value="">--Select--</option>
+              <option value="Low">Low (&lt;10 ppm)</option>
+              <option value="Medium">Medium (10–20 ppm)</option>
+              <option value="High">High (&gt;20 ppm)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="phosphorus">Phosphorus (ppm)</label>
+            <select id="phosphorus">
+              <option value="">--Select--</option>
+              <option value="Low">Low (&lt;15 ppm)</option>
+              <option value="Medium">Medium (15–30 ppm)</option>
+              <option value="High">High (&gt;30 ppm)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="potassium">Potassium (ppm)</label>
+            <select id="potassium">
+              <option value="">--Select--</option>
+              <option value="Low">Low (&lt;100 ppm)</option>
+              <option value="Medium">Medium (100–200 ppm)</option>
+              <option value="High">High (&gt;200 ppm)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="soilType">Soil Type</label>
+            <select id="soilType">
+              <option value="">--Select Type--</option>
+              <option value="clay">Clay</option>
+              <option value="sandy">Sandy</option>
+              <option value="loamy">Loamy</option>
+              <option value="silty">Silty</option>
+            </select>
+          </div>
+          <div class="buttons">
+            <button
+              type="button"
+              onclick="recommendFertilizer(); saveSoilRecord();"
+            >
+              Enter
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      // Redirect to login if not logged in
+
+      // Check login and username
+      const userId = localStorage.getItem("userId");
+      const username = localStorage.getItem("username");
+
+        if (!userId) {
+        alert("You are not logged in.");
+        window.location.href = "login.html";
+    }
+
+        document.addEventListener("DOMContentLoaded", () => {
+        const heading = document.getElementById("welcomeMessage");
+        if (heading) {
+        heading.innerHTML = `My Farm<br>Welcome, ${username || "Guest"}!`;
+        }
+      });
+
+
+      // Logout function
+      function logout() {
+        localStorage.clear();
+        alert("You have been logged out.");
+        window.location.href = "index.html";
+      }
+
+      // Update greeting with username (optional)
+      document.querySelector("h2").innerHTML = `My Farm<br>Welcome, ${
+        username || "Farmer"
+      }!`;
+
+      function recommendFertilizer() {
+        const ph = parseInt(document.getElementById("soilPh").value);
+        const moisture = document.getElementById("moisture").value;
+        const nitrogen = document.getElementById("nitrogen").value;
+        const phosphorus = document.getElementById("phosphorus").value;
+        const potassium = document.getElementById("potassium").value;
+        const soilType = document.getElementById("soilType").value;
+
+        let recommendation = "";
+        let products = [];
+        let crops = [];
+
+        if (isNaN(ph)) {
+          recommendation += "Please select a valid Soil pH.\n";
+        } else if (ph < 5.5) {
+          recommendation += "Soil is acidic. Add lime.\n";
+          products.push("Dolomite Lime - 350 Taka/50kg");
+          crops.push("Potatoes, Strawberries");
+        } else if (ph > 7.5) {
+          recommendation += "Soil is alkaline. Add sulfur.\n";
+          products.push("Elemental Sulfur - 400 Taka/25kg");
+          crops.push("Barley, Beets");
+        } else {
+          crops.push("Wheat, Rice, Corn");
+        }
+
+        if (nitrogen === "Low") {
+          recommendation += "Use Urea for Nitrogen.\n";
+          products.push("Urea Fertilizer - 800 Taka/50kg");
+          crops.push("Spinach, Lettuce");
+        }
+
+        if (phosphorus === "Low") {
+          recommendation += "Use SSP for Phosphorus.\n";
+          products.push("Single Super Phosphate (SSP) - 950 Taka/50kg");
+        }
+
+        if (potassium === "Low") {
+          recommendation += "Use MOP for Potassium.\n";
+          products.push("Muriate of Potash (MOP) - 900 Taka/50kg");
+          crops.push("Tomato, Carrot");
+        }
+
+        if (soilType === "sandy") {
+          recommendation += "Use slow-release fertilizers for sandy soils.\n";
+          products.push("Polymer-Coated Fertilizer - 1200 Taka/25kg");
+          crops.push("Peanuts, Watermelon");
+        } else if (soilType === "clay") {
+          crops.push("Rice, Broccoli");
+        } else if (soilType === "loamy") {
+          crops.push("Maize, Sugarcane, Soybeans");
+        }
+
+        document.getElementById("recommendationBox").innerText =
+          recommendation ||
+          "No recommendation available. Please complete the form.";
+        document.getElementById("productBox").innerText = products.length
+          ? products.join("\n")
+          : "No product suggestion available.";
+        document.getElementById("cropBox").innerText = crops.length
+          ? [...new Set(crops)].join(", ")
+          : "No crop suggestion available.";
+      }
+
+      function saveSoilRecord() {
+        const userId = sessionStorage.getItem("userId");
+
+        fetch("insert_soil_data.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userId: userId,
+            soilPh: parseFloat(document.getElementById("soilPh").value),
+            moisture: document.getElementById("moisture").value,
+            nitrogen: document.getElementById("nitrogen").value,
+            phosphorus: document.getElementById("phosphorus").value,
+            potassium: document.getElementById("potassium").value,
+            soilType: document.getElementById("soilType").value,
+            fertilizerText:
+              document.getElementById("recommendationBox").innerText,
+            fertilizerProducts: document.getElementById("productBox").innerText,
+            cropRecommendations: document.getElementById("cropBox").innerText,
+          }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.status === "success") {
+              alert("Soil data saved! Record ID: " + data.recordId);
+            } else {
+              alert("Error saving data: " + data.message);
+            }
+          });
+      }
+
+      const apiKey = "1fe76c796aea2599ca1868d87ae2bbe2";
+      const city = "Dhaka";
+
+      function fetchWeather(city) {
+        fetch(
+          `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            document.getElementById("weatherCityName").innerText = city;
+            document.getElementById("weatherTemp").innerText =
+              data.main.temp + "°C";
+            document.getElementById("weatherCondition").innerText =
+              data.weather[0].description;
+          })
+          .catch((err) => {
+            document.getElementById("weatherCondition").innerText =
+              "Unable to load weather";
+            console.error(err);
+          });
+      }
+
+      function updateWeather() {
+        const newCity = document
+          .getElementById("weatherCityInput")
+          .value.trim();
+        if (newCity) {
+          fetchWeather(newCity);
+        }
+      }
+
+      fetchWeather(city);
+
+      //User Profile
+    </script>
+  </body>
+</html>

@@ -53,28 +53,26 @@
     function handleCredentialResponse(response) {
       const data = parseJwt(response.credential);
       console.log("Decoded user data:", data);
-    
-      // Save to local/session storage
-      sessionStorage.setItem("userId", data.sub);
-      localStorage.setItem("userId", data.sub);
-    
-      // Check if the profile already exists
-      fetch(`get_user.php?google_id=${data.sub}`)
+
+      const googleId = data.sub;
+      sessionStorage.setItem("userId", googleId);
+      localStorage.setItem("userId", googleId);
+
+      fetch(`get_user.php?google_id=${googleId}`)
         .then(res => res.json())
         .then(result => {
           if (result.status === "success") {
-            // Profile exists → go to dashboard
-            localStorage.setItem("username", result.user.username);
-            alert("Welcome back, " + result.user.username + "!");
+            // Store user's full name (or fallback to username)
+            const name = result.user.name || result.user.username || "User";
+            localStorage.setItem("username", name);
+            alert("Welcome back, " + name + "!");
             window.location.href = "dashboard.html";
           } else {
-            // New user → go to profile creation
             alert("Login successful! Now please complete your profile.");
             window.location.href = "profile.html";
           }
         });
     }
-    
 
     function parseJwt(token) {
       return JSON.parse(atob(token.split('.')[1]));
