@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Create Profile - AgriExpert</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #e6f5e9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .profile-container {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: #2c7a4b;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    input {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      background-color: #5ac97d;
+      color: white;
+      font-weight: bold;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45b369;
+    }
+  </style>
+</head>
+<body>
+  <div class="profile-container">
+    <h1>Complete Your Profile</h1>
+    <form id="profileForm">
+      <input type="text" id="name" placeholder="Full Name" required />
+      <input type="email" id="email" placeholder="Email" required />
+      <input type="text" id="phone" placeholder="Phone Number" required />
+      <button type="submit">Save Profile</button>
+    </form>
+  </div>
+
+  <script>
+    const googleId = sessionStorage.getItem("userId");
+    if (!googleId) {
+      alert("You must log in first.");
+      window.location.href = "login.html";
+    }
+
+    const profileForm = document.getElementById("profileForm");
+    profileForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const username = googleId.slice(-3); // last 3 digits of Google ID
+
+      fetch("save_user.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          google_id: googleId,
+          username: username,
+          name: document.getElementById("name").value,
+          email: document.getElementById("email").value,
+          phone: document.getElementById("phone").value
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === "success") {
+            localStorage.setItem("username", username);
+          alert("Profile saved! Redirecting to dashboard...");
+          window.location.href = "dashboard.html";
+        } else {
+          alert("Error: " + data.message);
+        }
+      });
+    });
+  </script>
+</body>
+</html>

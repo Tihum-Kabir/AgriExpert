@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agricultural Expert System</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background-color: #ffffff;
+      scroll-behavior: smooth;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 50px;
+      background: linear-gradient(to right, #6cc85c, #30cfd0);
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    nav a {
+      margin-left: 30px;
+      text-decoration: none;
+      color: black;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .hero {
+      background: url('background.jpg') no-repeat center center/cover;
+      height: 80vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      text-align: center;
+      padding: 0 20px;
+    }
+
+    .hero h1 {
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin-bottom: 20px;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 10px 20px;
+      border-radius: 10px;
+    }
+
+    .cta-button {
+      background-color: white;
+      color: black;
+      font-weight: bold;
+      padding: 15px 30px;
+      border-radius: 10px;
+      border: 3px solid #1dc6d1;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .cta-button:hover {
+      background-color: #1dc6d1;
+      color: white;
+    }
+
+    .how-it-works {
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .how-it-works h2 {
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin-bottom: 40px;
+    }
+
+    .steps {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      gap: 30px;
+    }
+
+    .step {
+      flex: 1 1 200px;
+      max-width: 250px;
+      font-weight: bold;
+      font-size: 1.5rem;
+    }
+
+    .contact-section {
+      background-color: #f0f0f0;
+      padding: 60px 20px;
+      text-align: center;
+    }
+
+    .contact-section h2 {
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+    }
+
+    .contact-section p {
+      font-size: 1.2rem;
+      margin: 10px 0;
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <script>
+    const userId = localStorage.getItem("userId");
+    if (!userId) {
+      window.location.href = "login.html";
+    }
+  </script>
+  <header>
+    <div class="logo">LOGO</div>
+    <nav>
+      <a href="login.html">Login</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h1>Smart Farming: AI-Powered Crop & Fertilizer Recommendations</h1>
+    <button class="cta-button" onclick="window.location.href='login.html'">Get Started</button>
+  </section>
+
+  <section class="how-it-works">
+    <h2>How It Works?</h2>
+    <div class="steps">
+      <div class="step">Enter soil parameters.</div>
+      <div class="step">Get AI-based crop and fertilizer recommendations.</div>
+      <div class="step">Monitor soil health trends.</div>
+      <div class="step">Improve agricultural yield.</div>
+    </div>
+  </section>
+
+  <section id="contact" class="contact-section">
+    <h2>Contact Us</h2>
+    <p>Number: 01912869939</p>
+    <p>Email: Agrisoil@gmail.com</p>
+  </section>
+</body>
+</html>

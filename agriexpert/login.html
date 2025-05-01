@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Agricultural Expert System</title>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #e6f5e9;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .login-container {
+      background: white;
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      color: #2c7a4b;
+    }
+
+    #g_id_onload, #g_id_signin {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h1>Login with Google</h1>
+    <div
+      id="g_id_onload"
+      data-client_id="861177362292-bp8so6fofj2l39iubingblgc3p9eamod.apps.googleusercontent.com"
+      data-context="signin"
+      data-ux_mode="popup"
+      data-callback="handleCredentialResponse"
+      data-auto_prompt="false">
+    </div>
+
+    <div class="g_id_signin" data-type="standard" data-size="large"></div>
+  </div>
+
+  <script>
+    function handleCredentialResponse(response) {
+      const data = parseJwt(response.credential);
+      console.log("Decoded user data:", data);
+    
+      // Save to local/session storage
+      sessionStorage.setItem("userId", data.sub);
+      localStorage.setItem("userId", data.sub);
+    
+      // Check if the profile already exists
+      fetch(`get_user.php?google_id=${data.sub}`)
+        .then(res => res.json())
+        .then(result => {
+          if (result.status === "success") {
+            // Profile exists → go to dashboard
+            localStorage.setItem("username", result.user.username);
+            alert("Welcome back, " + result.user.username + "!");
+            window.location.href = "dashboard.html";
+          } else {
+            // New user → go to profile creation
+            alert("Login successful! Now please complete your profile.");
+            window.location.href = "profile.html";
+          }
+        });
+    }
+    
+
+    function parseJwt(token) {
+      return JSON.parse(atob(token.split('.')[1]));
+    }
+  </script>
+</body>
+</html>

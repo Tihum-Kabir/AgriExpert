@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Profile</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5fdf8;
+      padding: 20px;
+    }
+    h1 {
+      color: #2c7a4b;
+    }
+    .profile, .records {
+      background: white;
+      padding: 20px;
+      margin-top: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th, td {
+      padding: 8px;
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+  <h1>My Profile</h1>
+
+  <div class="profile" id="profileBox">Loading profile...</div>
+
+  <h2>My Soil Records</h2>
+  <div class="records">
+    <table id="recordsTable">
+      <thead>
+        <tr>
+          <th>pH</th><th>Moisture</th><th>N</th><th>P</th><th>K</th><th>Type</th><th>Time</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script>
+    const userId = localStorage.getItem("userId");
+    if (!userId) {
+      alert("Login first.");
+      window.location.href = "login.html";
+    }
+
+    fetch(`get_user.php?google_id=${userId}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === "success") {
+          const u = data.user;
+          document.getElementById("profileBox").innerHTML = `
+            <p><strong>Name:</strong> ${u.name}</p>
+            <p><strong>Email:</strong> ${u.email}</p>
+            <p><strong>Phone:</strong> ${u.phone}</p>
+            <p><strong>Username:</strong> ${u.username}</p>
+          `;
+        } else {
+          document.getElementById("profileBox").innerText = "Profile not found.";
+        }
+      });
+
+    fetch(`get_soil_records.php?userId=${userId}`)
+      .then(res => res.json())
+      .then(data => {
+        const tbody = document.querySelector("#recordsTable tbody");
+        data.records.forEach(r => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${r.soilPh}</td><td>${r.moisture}</td><td>${r.nitrogen}</td>
+            <td>${r.phosphorus}</td><td>${r.potassium}</td><td>${r.soilType}</td><td>${r.timestamp}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      });
+  </script>
+</body>
+</html>
